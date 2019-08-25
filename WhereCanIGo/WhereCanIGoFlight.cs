@@ -47,13 +47,13 @@ namespace WhereCanIGo
         {
             List<DialogGUIBase> guiItems = new List<DialogGUIBase>();
             bool vesselIsHome = FlightGlobals.ActiveVessel.mainBody == FlightGlobals.GetHomeBody();
-            PlanetDeltaV currentDvNode = ConvertBodyToPlanetDeltaV(FlightGlobals.ActiveVessel.mainBody);
             if (FlightGlobals.ActiveVessel == null)
             {
                 guiItems.Add(new DialogGUILabel("No Vessel Detected"));
             }
             else if(vesselIsHome && FlightGlobals.ActiveVessel.situation == Vessel.Situations.ORBITING)
             {
+                guiItems.Add(new DialogGUILabel(_utilities.SystemNotes, _utilities.CreateNoteStyle()));
                 guiItems.Add(new DialogGUIToggle(() => _returnTrip, "Return Trip?", delegate { SetReturnTrip(); }));
                 for (int i = 0; i < _utilities.Planets.Count; i++)
                 {
@@ -67,17 +67,9 @@ namespace WhereCanIGo
                 }
                 guiItems.Add(new DialogGUILabel("*Assuming craft has enough chutes"));
             }
-            else if (vesselIsHome)
-            {
-                guiItems.Add(new DialogGUILabel("No Data Available. Achieve stable orbit around "+FlightGlobals.GetHomeBodyName(), _utilities.GenerateStyle(99999, true)));
-            }
-            else if (currentDvNode == null)
-            {
-                guiItems.Add(new DialogGUILabel("No Data Available", _utilities.GenerateStyle(99999, true)));
-            }
             else
             {
-                guiItems.Add(GetDeltaVString(currentDvNode));
+                guiItems.Add(new DialogGUILabel("No Data Available. Achieve stable orbit around "+FlightGlobals.GetHomeBodyName(), _utilities.GenerateStyle(99999, true)));
             }
             guiItems.Add(new DialogGUIButton("Close", () =>_utilities.CloseDialog(_uiDialog), false));
             return PopupDialog.SpawnPopupDialog(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
@@ -96,29 +88,7 @@ namespace WhereCanIGo
             return null;
         }
 
-        private DialogGUILabel GetDeltaVString(PlanetDeltaV planet)
-        {
-            int deltaV = 99999;
-            string s = "";
-            // ReSharper disable once SwitchStatementMissingSomeCases
-            switch (FlightGlobals.ActiveVessel.situation)
-            {
-                case Vessel.Situations.LANDED:
-                    deltaV = planet.ReturnFromLandingDv;
-                    break;
-                case Vessel.Situations.ORBITING:
-                    deltaV = planet.ReturnFromOrbitDv;
-                    break;
-                case Vessel.Situations.ESCAPING:
-                    deltaV = planet.ReturnFromFlybyDv;
-                    break;
-                default:
-                    s = "NO DATA AVAILABLE";
-                    break;
-            }
-            if(s != "NO DATA AVAILABLE") s = "RETURN POSSIBLE: " + _utilities.VesselStatus(deltaV, "", planet);
-            return new DialogGUILabel(s, _utilities.GenerateStyle(deltaV, true));
-        }
+        
 
 
 

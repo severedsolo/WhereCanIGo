@@ -10,6 +10,7 @@ namespace WhereCanIGo
         internal readonly List<PlanetDeltaV> Planets = new List<PlanetDeltaV>();
         private readonly PopupDialog _uiDialog;
         private readonly Rect _geometry = new Rect(0.5f, 0.5f, 800, 30);
+        internal readonly string SystemNotes;
 
         public  Utilities()
         {
@@ -20,7 +21,7 @@ namespace WhereCanIGo
                 Debug.Log("[WhereCanIGo]: deltaVNode is null");
                 return;
             }
-
+            SystemNotes = deltaVNode.GetValue("notes");
             ConfigNode[] bodies = deltaVNode.GetNodes("BODY");
             for (int i = 0; i < bodies.Length; i++)
             {
@@ -54,10 +55,12 @@ namespace WhereCanIGo
         {
             int fontsize = 12;
             if(largePrint) fontsize = 24;
+            FontStyle fontstyle = FontStyle.Normal;
+            if (largePrint) fontstyle = FontStyle.Bold;
             UIStyle style = new UIStyle
             {
                 alignment = TextAnchor.MiddleLeft,
-                fontStyle = FontStyle.Normal,
+                fontStyle = fontstyle,
                 normal = new UIStyleState(),
                 fontSize = fontsize
             };
@@ -92,7 +95,7 @@ namespace WhereCanIGo
             }
             if (deltaVRequired < 0) return "N/A";
             if (deltaVRequired > vesselDeltaV) return "NO";
-            if (vesselDeltaV - deltaVRequired < deltaVRequired * 0.1) return "MARGINAL";
+            if (vesselDeltaV - deltaVRequired < deltaVRequired * 0.05) return "MARGINAL";
             if (situation == "Landing: " && planet != null && planet.RequireChutes) return "YES*";
             return "YES";
         }
@@ -110,6 +113,20 @@ namespace WhereCanIGo
                 default:
                     return Color.green;
             }
+        }
+
+        internal UIStyle CreateNoteStyle()
+        {
+            int fontsize = 12;
+            UIStyle style = new UIStyle
+            {
+                alignment = TextAnchor.MiddleLeft,
+                fontStyle = FontStyle.Normal,
+                normal = new UIStyleState(),
+                fontSize = fontsize
+            };
+            style.normal.textColor = Color.cyan;
+            return style;
         }
     }
 }
