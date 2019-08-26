@@ -53,6 +53,7 @@ namespace WhereCanIGo
             else
             {
                 guiItems.Add(new DialogGUILabel(_utilities.SystemNotes, _utilities.CreateNoteStyle()));
+                guiItems.Add(new DialogGUILabel(_utilities.Warnings, _utilities.CreateNoteStyle()));
                 guiItems.Add(new DialogGUIToggle(() => _returnTrip, "Return Trip?", delegate { SetReturnTrip(); }));
                 for (int i = 0; i < _utilities.Planets.Count; i++)
                 {

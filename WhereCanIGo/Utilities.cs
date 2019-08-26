@@ -11,6 +11,7 @@ namespace WhereCanIGo
         private readonly PopupDialog _uiDialog;
         private readonly Rect _geometry = new Rect(0.5f, 0.5f, 800, 30);
         internal readonly string SystemNotes;
+        internal readonly string Warnings;
 
         public  Utilities()
         {
@@ -22,6 +23,8 @@ namespace WhereCanIGo
                 return;
             }
             SystemNotes = deltaVNode.GetValue("notes");
+            SystemNotes = deltaVNode.GetValue("warning");
+            
             ConfigNode[] bodies = deltaVNode.GetNodes("BODY");
             for (int i = 0; i < bodies.Length; i++)
             {
@@ -121,7 +124,7 @@ namespace WhereCanIGo
             UIStyle style = new UIStyle
             {
                 alignment = TextAnchor.MiddleLeft,
-                fontStyle = FontStyle.Normal,
+                fontStyle = FontStyle.Bold,
                 normal = new UIStyleState(),
                 fontSize = fontsize
             };
