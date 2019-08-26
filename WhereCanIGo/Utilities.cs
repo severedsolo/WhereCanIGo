@@ -23,7 +23,7 @@ namespace WhereCanIGo
                 return;
             }
             SystemNotes = deltaVNode.GetValue("notes");
-            SystemNotes = deltaVNode.GetValue("warning");
+            Warnings = deltaVNode.GetValue("warning");
             
             ConfigNode[] bodies = deltaVNode.GetNodes("BODY");
             for (int i = 0; i < bodies.Length; i++)
