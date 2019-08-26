@@ -54,9 +54,8 @@ namespace WhereCanIGo
             {
                 guiItems.Add(new DialogGUILabel(_utilities.SystemNotes, _utilities.CreateNoteStyle()));
                 guiItems.Add(new DialogGUILabel(_utilities.Warnings, _utilities.CreateNoteStyle()));
-                DialogGUIBase[] vertical = new DialogGUIBase[_utilities.Planets.Count+1];
+                DialogGUIBase[] vertical = new DialogGUIBase[_utilities.Planets.Count];
                 guiItems.Add(new DialogGUIToggle(() => _returnTrip, "Return Trip?", delegate { SetReturnTrip(); }));
-                vertical[0] = new DialogGUILabel("Can I Go To:");
                 for (int i = 0; i < _utilities.Planets.Count; i++)
                 {
                     PlanetDeltaV p = _utilities.Planets.ElementAt(i);
@@ -65,7 +64,7 @@ namespace WhereCanIGo
                     horizontal[1] = GetDeltaVString(p, "Flyby: ");
                     horizontal[2] = GetDeltaVString(p, "Orbiting: ");
                     horizontal[3] = GetDeltaVString(p, "Landing: ");
-                    vertical[i+1] = new DialogGUIHorizontalLayout(horizontal);
+                    vertical[i] = new DialogGUIHorizontalLayout(horizontal);
                 }
                 DialogGUIVerticalLayout layout = new DialogGUIVerticalLayout(vertical);
                 guiItems.Add(new DialogGUIScrollList(-Vector2.one, false, true, layout));
