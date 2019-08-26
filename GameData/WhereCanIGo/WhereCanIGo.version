@@ -1,16 +1,16 @@
 {
     "NAME"     : "WHERE CAN I GO",
-    "URL"      : "https://github.com/severedsolo/MADLAD/blob/master/MADLAD.version",
-    "DOWNLOAD" : "https://github.com/severedsolo/MADLAD/releases",
+    "URL"      : "https://github.com/severedsolo/WhereCanIGo/blob/master/GameData/WhereCanIGo/WhereCanIGo.version",
+    "DOWNLOAD" : "https://github.com/severedsolo/WhereCanIGo/releases",
     "GITHUB" :
     {
         "USERNAME" : "severedsolo",
-        "REPOSITORY" : "MADLAD"
+        "REPOSITORY" : "WhereCanIGo"
     },
     "VERSION" :
     {
         "MAJOR" : 1,
-        "MINOR" : 1,
+        "MINOR" : 0,
         "PATCH" : 0,
         "BUILD" : 0
     },
