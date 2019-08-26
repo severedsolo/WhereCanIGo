@@ -11,7 +11,7 @@ namespace WhereCanIGo
     {
         private ApplicationLauncherButton _toolbarButton;
         private PopupDialog _uiDialog;
-        private readonly Rect _geometry = new Rect(0.5f, 0.5f, 800, 30);
+        private readonly Rect _geometry = new Rect(0.5f, 0.5f, 700, 500);
         private bool _returnTrip;
         private Utilities _utilities;
 
@@ -54,7 +54,9 @@ namespace WhereCanIGo
             {
                 guiItems.Add(new DialogGUILabel(_utilities.SystemNotes, _utilities.CreateNoteStyle()));
                 guiItems.Add(new DialogGUILabel(_utilities.Warnings, _utilities.CreateNoteStyle()));
+                DialogGUIBase[] vertical = new DialogGUIBase[_utilities.Planets.Count+1];
                 guiItems.Add(new DialogGUIToggle(() => _returnTrip, "Return Trip?", delegate { SetReturnTrip(); }));
+                vertical[0] = new DialogGUILabel("Can I Go To:");
                 for (int i = 0; i < _utilities.Planets.Count; i++)
                 {
                     PlanetDeltaV p = _utilities.Planets.ElementAt(i);
@@ -63,8 +65,10 @@ namespace WhereCanIGo
                     horizontal[1] = GetDeltaVString(p, "Flyby: ");
                     horizontal[2] = GetDeltaVString(p, "Orbiting: ");
                     horizontal[3] = GetDeltaVString(p, "Landing: ");
-                    guiItems.Add(new DialogGUIHorizontalLayout(horizontal));
+                    vertical[i+1] = new DialogGUIHorizontalLayout(horizontal);
                 }
+                DialogGUIVerticalLayout layout = new DialogGUIVerticalLayout(vertical);
+                guiItems.Add(new DialogGUIScrollList(-Vector2.one, false, true, layout));
             }
 
             guiItems.Add(new DialogGUILabel("*Assuming craft has enough chutes"));
