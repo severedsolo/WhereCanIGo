@@ -54,24 +54,22 @@ namespace WhereCanIGo
             {
                 guiItems.Add(new DialogGUILabel(_utilities.SystemNotes, _utilities.CreateNoteStyle()));
                 guiItems.Add(new DialogGUILabel(_utilities.Warnings, _utilities.CreateNoteStyle()));
-                DialogGUIBase[] vertical = new DialogGUIBase[_utilities.Planets.Count];
+                DialogGUIBase[] vertical = new DialogGUIBase[_utilities.Planets.Count+1];
                 guiItems.Add(new DialogGUIToggle(() => _returnTrip, "Return Trip?", delegate { SetReturnTrip(); }));
                 for (int i = 0; i < _utilities.Planets.Count; i++)
                 {
                     PlanetDeltaV p = _utilities.Planets.ElementAt(i);
                     DialogGUIBase[] horizontal = new DialogGUIBase[4];
-                    if(p.DisplayName != String.Empty) horizontal[0] = new DialogGUILabel(p.DisplayName, _utilities.GenerateStyle(-1, false));
-                    else if(p.DisplayName != String.Empty) horizontal[0] = new DialogGUILabel(p.Name, _utilities.GenerateStyle(-1, false));
+                    horizontal[0] = new DialogGUILabel(_utilities.GetPlanetName(p), _utilities.GenerateStyle(-1, false));
                     horizontal[1] = GetDeltaVString(p, "Flyby: ");
-                    horizontal[2] = GetDeltaVString(p, "Orbiting: ");
-                    horizontal[3] = GetDeltaVString(p, "Landing: ");
+                    horizontal[2] = GetDeltaVString(p, "Orbiting: "); 
+                    if(p.IsHomeWorld && p.SynchronousDv != -1) horizontal[3] = GetDeltaVString(p, "Synchronous Orbit: ");
+                    else horizontal[3] = GetDeltaVString(p, "Landing: ");
                     vertical[i] = new DialogGUIHorizontalLayout(horizontal);
-                    if(p.SynchronousDv != -1) guiItems.Add(GetDeltaVString(p, "Synchronous Orbit"));
                 }
                 DialogGUIVerticalLayout layout = new DialogGUIVerticalLayout(vertical);
                 guiItems.Add(new DialogGUIScrollList(-Vector2.one, false, true, layout));
             }
-
             guiItems.Add(new DialogGUILabel("*Assuming craft has enough chutes"));
             guiItems.Add(new DialogGUIButton("Close", () =>_utilities.CloseDialog(_uiDialog), false));
             return PopupDialog.SpawnPopupDialog(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
@@ -87,28 +85,31 @@ namespace WhereCanIGo
             string s;
             // ReSharper disable once SwitchStatementMissingSomeCases
             switch (situation)
-            {
-                case "Flyby: ":
-                    deltaV = planet.EscapeDv;
-                    if (_returnTrip) deltaV += planet.ReturnFromFlybyDv;
-                    break;
-                case "Orbiting: ":
-                    deltaV = planet.OrbitDv;
-                    if (_returnTrip) deltaV += planet.ReturnFromOrbitDv;
-                    break;
-                case "Landing: ":
-                    deltaV = planet.LandDv;
-                    if (_returnTrip) deltaV += planet.ReturnFromLandingDv;
-                    break;
-                case "Synchronous Orbit: ":
-                    deltaV = planet.SynchronousDv;
-                    situation = planet.Name + " " + situation;
-                    break;
-            }
-
+                {
+                    case "Flyby: ":
+                        deltaV = planet.EscapeDv;
+                        if (_returnTrip) deltaV += planet.ReturnFromFlybyDv;
+                        break;
+                    case "Orbiting: ":
+                        deltaV = planet.OrbitDv;
+                        if (_returnTrip) deltaV += planet.ReturnFromOrbitDv;
+                        break;
+                    case "Landing: ":
+                        deltaV = planet.LandDv;
+                        if (_returnTrip) deltaV += planet.ReturnFromLandingDv;
+                        break;
+                    case "Synchronous Orbit: ":
+                        deltaV = planet.SynchronousDv;
+                        break;
+                }
             UIStyle style = _utilities.GenerateStyle(deltaV, false);
             string status = _utilities.VesselStatus(deltaV, situation, planet);
-            double shortFallOrDeficit = Math.Abs(deltaV - EditorLogic.fetch.ship.vesselDeltaV.TotalDeltaVVac);
+            double shortFallOrDeficit = 0;
+            if (EditorLogic.fetch.ship != null && EditorLogic.fetch.ship.vesselDeltaV != null)
+            {
+                shortFallOrDeficit =
+                    Math.Round(Math.Abs(deltaV - EditorLogic.fetch.ship.vesselDeltaV.TotalDeltaVVac), 0);
+            }
             if (status == "NO")
                 status = status + " (" + shortFallOrDeficit +
                          "m/s short)";

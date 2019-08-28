@@ -17,6 +17,7 @@ namespace WhereCanIGo
         internal readonly int ReturnFromLandingDv;
         internal readonly bool Setup;
         internal readonly bool RequireChutes;
+        internal readonly bool IsHomeWorld = false;
         internal readonly CelestialBody RelatedBody;
         
         public PlanetDeltaV(ConfigNode setupNode)
@@ -27,6 +28,7 @@ namespace WhereCanIGo
                 CelestialBody cb = FlightGlobals.Bodies.ElementAt(i);
                 if (cb.name != Name) continue;
                 RelatedBody = cb;
+                if (RelatedBody == FlightGlobals.GetHomeBody()) IsHomeWorld = true;
                 break;
             }
             if (RelatedBody == null)
@@ -35,8 +37,8 @@ namespace WhereCanIGo
                 return;
             }
             int.TryParse(setupNode.GetValue("flybyDV"), out EscapeDv);
-            setupNode.TryGetValue("synchronousDV", ref SynchronousDv);
-            setupNode.TryGetValue("displayName", ref DisplayName);
+            if(!setupNode.TryGetValue("synchronousDV", ref SynchronousDv)) SynchronousDv = -1;
+            if(!setupNode.TryGetValue("displayName", ref DisplayName)) DisplayName = String.Empty;
             int.TryParse(setupNode.GetValue("orbitDV"), out OrbitDv);
             int.TryParse(setupNode.GetValue("landDV"), out LandDv);
             int.TryParse(setupNode.GetValue("returnFromFlybyDV"), out ReturnFromFlybyDv);

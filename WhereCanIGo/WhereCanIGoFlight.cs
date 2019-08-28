@@ -62,13 +62,12 @@ namespace WhereCanIGo
                     DialogGUIBase[] horizontal = new DialogGUIBase[4];
                     if (p.DisplayName != String.Empty)
                         horizontal[0] = new DialogGUILabel(p.DisplayName, _utilities.GenerateStyle(-1, false));
-                    else if (p.DisplayName != String.Empty)
-                        horizontal[0] = new DialogGUILabel(p.Name, _utilities.GenerateStyle(-1, false));
+                    else horizontal[0] = new DialogGUILabel(p.Name, _utilities.GenerateStyle(-1, false));
                     horizontal[1] = GetDeltaVString(p, "Flyby: ");
                     horizontal[2] = GetDeltaVString(p, "Orbiting: ");
                     horizontal[3] = GetDeltaVString(p, "Landing: ");
                     guiItems.Add(new DialogGUIHorizontalLayout(horizontal));
-                    if (p.SynchronousDv != -1) guiItems.Add(GetDeltaVString(p, "Synchronous Orbit"));
+                    if (p.SynchronousDv != -1) guiItems.Add(GetDeltaVString(p, "Synchronous Orbit: "));
                 }
 
                 guiItems.Add(new DialogGUILabel("*Assuming craft has enough chutes"));
