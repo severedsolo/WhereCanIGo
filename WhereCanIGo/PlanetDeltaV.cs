@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace WhereCanIGo
     {
         internal readonly string Name;
         internal readonly int EscapeDv;
+        internal readonly string DisplayName = String.Empty;
         internal readonly int OrbitDv;
         internal readonly int SynchronousDv = -1;
         internal readonly int LandDv;
@@ -34,6 +36,7 @@ namespace WhereCanIGo
             }
             int.TryParse(setupNode.GetValue("flybyDV"), out EscapeDv);
             setupNode.TryGetValue("synchronousDV", ref SynchronousDv);
+            setupNode.TryGetValue("displayName", ref DisplayName);
             int.TryParse(setupNode.GetValue("orbitDV"), out OrbitDv);
             int.TryParse(setupNode.GetValue("landDV"), out LandDv);
             int.TryParse(setupNode.GetValue("returnFromFlybyDV"), out ReturnFromFlybyDv);

@@ -60,7 +60,8 @@ namespace WhereCanIGo
                 {
                     PlanetDeltaV p = _utilities.Planets.ElementAt(i);
                     DialogGUIBase[] horizontal = new DialogGUIBase[4];
-                    horizontal[0] = new DialogGUILabel(p.Name, _utilities.GenerateStyle(-1, false));
+                    if(p.DisplayName != String.Empty) horizontal[0] = new DialogGUILabel(p.DisplayName, _utilities.GenerateStyle(-1, false));
+                    else if(p.DisplayName != String.Empty) horizontal[0] = new DialogGUILabel(p.Name, _utilities.GenerateStyle(-1, false));
                     horizontal[1] = GetDeltaVString(p, "Flyby: ");
                     horizontal[2] = GetDeltaVString(p, "Orbiting: ");
                     horizontal[3] = GetDeltaVString(p, "Landing: ");
