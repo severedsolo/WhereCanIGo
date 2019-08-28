@@ -8,6 +8,7 @@ namespace WhereCanIGo
         internal readonly string Name;
         internal readonly int EscapeDv;
         internal readonly int OrbitDv;
+        internal readonly int SynchronousDv = -1;
         internal readonly int LandDv;
         internal readonly int ReturnFromFlybyDv;
         internal readonly int ReturnFromOrbitDv;
@@ -32,6 +33,7 @@ namespace WhereCanIGo
                 return;
             }
             int.TryParse(setupNode.GetValue("flybyDV"), out EscapeDv);
+            setupNode.TryGetValue("synchronousDV", ref SynchronousDv);
             int.TryParse(setupNode.GetValue("orbitDV"), out OrbitDv);
             int.TryParse(setupNode.GetValue("landDV"), out LandDv);
             int.TryParse(setupNode.GetValue("returnFromFlybyDV"), out ReturnFromFlybyDv);

@@ -65,6 +65,7 @@ namespace WhereCanIGo
                     horizontal[2] = GetDeltaVString(p, "Orbiting: ");
                     horizontal[3] = GetDeltaVString(p, "Landing: ");
                     guiItems.Add(new DialogGUIHorizontalLayout(horizontal));
+                    if(p.SynchronousDv != -1) guiItems.Add(GetDeltaVString(p, "Synchronous Orbit"));
                 }
                 guiItems.Add(new DialogGUILabel("*Assuming craft has enough chutes"));
             }
@@ -89,7 +90,7 @@ namespace WhereCanIGo
             return null;
         }
 
-        
+
 
 
 
@@ -112,13 +113,19 @@ namespace WhereCanIGo
                     deltaV = planet.LandDv;
                     if (_returnTrip) deltaV += planet.ReturnFromLandingDv;
                     break;
+                case "Synchronous Orbit: ":
+                    deltaV = planet.SynchronousDv;
+                    situation = planet.Name + " " + situation;
+                    break;
             }
+
             deltaV -= ConvertBodyToPlanetDeltaV(FlightGlobals.GetHomeBody()).OrbitDv;
             UIStyle style = _utilities.GenerateStyle(deltaV, false);
             string status = _utilities.VesselStatus(deltaV, situation, planet);
+            double shortFallOrDeficit = Math.Abs(deltaV - FlightGlobals.ActiveVessel.VesselDeltaV.TotalDeltaVVac);
             if (status == "NO")
-                status = status + " (" + Math.Ceiling(deltaV - FlightGlobals.ActiveVessel.VesselDeltaV.TotalDeltaVVac) +
-                         "m/s short)";
+                status = status + " (" + shortFallOrDeficit + "m/s short)";
+            else status = status + " (+" + shortFallOrDeficit + "m/s)";
             if (_utilities.SituationValid(planet.RelatedBody, situation)) s = " | " + situation + status;
             else s = " | " + situation + "N/A";
             return new DialogGUILabel(s, style);

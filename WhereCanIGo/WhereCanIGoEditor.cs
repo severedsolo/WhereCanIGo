@@ -65,6 +65,7 @@ namespace WhereCanIGo
                     horizontal[2] = GetDeltaVString(p, "Orbiting: ");
                     horizontal[3] = GetDeltaVString(p, "Landing: ");
                     vertical[i] = new DialogGUIHorizontalLayout(horizontal);
+                    if(p.SynchronousDv != -1) guiItems.Add(GetDeltaVString(p, "Synchronous Orbit"));
                 }
                 DialogGUIVerticalLayout layout = new DialogGUIVerticalLayout(vertical);
                 guiItems.Add(new DialogGUIScrollList(-Vector2.one, false, true, layout));
@@ -98,13 +99,20 @@ namespace WhereCanIGo
                     deltaV = planet.LandDv;
                     if (_returnTrip) deltaV += planet.ReturnFromLandingDv;
                     break;
+                case "Synchronous Orbit: ":
+                    deltaV = planet.SynchronousDv;
+                    situation = planet.Name + " " + situation;
+                    break;
             }
 
             UIStyle style = _utilities.GenerateStyle(deltaV, false);
             string status = _utilities.VesselStatus(deltaV, situation, planet);
+            double shortFallOrDeficit = Math.Abs(deltaV - EditorLogic.fetch.ship.vesselDeltaV.TotalDeltaVVac);
             if (status == "NO")
-                status = status + " (" + Math.Ceiling(deltaV - EditorLogic.fetch.ship.vesselDeltaV.TotalDeltaVVac) +
+                status = status + " (" + shortFallOrDeficit +
                          "m/s short)";
+            else status = status + " (+" + shortFallOrDeficit +
+                          "m/s)";
             if (_utilities.SituationValid(planet.RelatedBody, situation)) s = " | " + situation + status;
             else s = " | " + situation + "N/A";
             return new DialogGUILabel(s, style);
