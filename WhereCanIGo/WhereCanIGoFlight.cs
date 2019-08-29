@@ -63,7 +63,8 @@ namespace WhereCanIGo
                     horizontal[0] = new DialogGUILabel(p.GetName(), _utilities.GenerateStyle(-1, false));
                     horizontal[1] = GetDeltaVString(p, "Flyby: ");
                     horizontal[2] = GetDeltaVString(p, "Orbiting: ");
-                    horizontal[3] = GetDeltaVString(p, "Landing: ");
+                    if(p.IsHomeWorld && p.SynchronousDv != -1) horizontal[3] = GetDeltaVString(p, "Synchronous Orbit: ");
+                    else horizontal[3] = GetDeltaVString(p, "Landing: ");
                     guiItems.Add(new DialogGUIHorizontalLayout(horizontal));
                     if (p.SynchronousDv != -1) guiItems.Add(GetDeltaVString(p, "Synchronous Orbit: "));
                 }
