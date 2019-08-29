@@ -66,7 +66,6 @@ namespace WhereCanIGo
                     if(p.IsHomeWorld && p.SynchronousDv != -1) horizontal[3] = GetDeltaVString(p, "Synchronous Orbit: ");
                     else horizontal[3] = GetDeltaVString(p, "Landing: ");
                     guiItems.Add(new DialogGUIHorizontalLayout(horizontal));
-                    if (p.SynchronousDv != -1) guiItems.Add(GetDeltaVString(p, "Synchronous Orbit: "));
                 }
 
                 guiItems.Add(new DialogGUILabel("*Assuming craft has enough chutes"));
@@ -117,7 +116,6 @@ namespace WhereCanIGo
                     break;
                 case "Synchronous Orbit: ":
                     deltaV = planet.SynchronousDv;
-                    situation = planet.Name + " " + situation;
                     break;
             }
 
