@@ -124,7 +124,7 @@ namespace WhereCanIGo
             deltaV -= ConvertBodyToPlanetDeltaV(FlightGlobals.GetHomeBody()).OrbitDv;
             UIStyle style = _utilities.GenerateStyle(deltaV, false);
             string status = _utilities.VesselStatus(deltaV, situation, planet);
-            double shortFallOrDeficit = Math.Abs(deltaV - FlightGlobals.ActiveVessel.VesselDeltaV.TotalDeltaVVac);
+            double shortFallOrDeficit = Math.Round(Math.Abs(deltaV - FlightGlobals.ActiveVessel.VesselDeltaV.TotalDeltaVVac),0);
             if (status == "NO")
                 status = status + " (" + shortFallOrDeficit + "m/s short)";
             else status = status + " (+" + shortFallOrDeficit + "m/s)";
