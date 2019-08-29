@@ -54,13 +54,13 @@ namespace WhereCanIGo
             {
                 guiItems.Add(new DialogGUILabel(_utilities.SystemNotes, _utilities.CreateNoteStyle()));
                 guiItems.Add(new DialogGUILabel(_utilities.Warnings, _utilities.CreateNoteStyle()));
-                DialogGUIBase[] vertical = new DialogGUIBase[_utilities.Planets.Count+1];
+                DialogGUIBase[] vertical = new DialogGUIBase[_utilities.Planets.Count];
                 guiItems.Add(new DialogGUIToggle(() => _returnTrip, "Return Trip?", delegate { SetReturnTrip(); }));
                 for (int i = 0; i < _utilities.Planets.Count; i++)
                 {
                     PlanetDeltaV p = _utilities.Planets.ElementAt(i);
                     DialogGUIBase[] horizontal = new DialogGUIBase[4];
-                    horizontal[0] = new DialogGUILabel(_utilities.GetPlanetName(p), _utilities.GenerateStyle(-1, false));
+                    horizontal[0] = new DialogGUILabel(p.GetName(), _utilities.GenerateStyle(-1, false));
                     horizontal[1] = GetDeltaVString(p, "Flyby: ");
                     horizontal[2] = GetDeltaVString(p, "Orbiting: "); 
                     if(p.IsHomeWorld && p.SynchronousDv != -1) horizontal[3] = GetDeltaVString(p, "Synchronous Orbit: ");

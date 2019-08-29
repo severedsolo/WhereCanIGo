@@ -48,5 +48,11 @@ namespace WhereCanIGo
             Setup = true;
             Debug.Log("[WhereCanIGo]: Setup "+Name+" EscapeDV: "+EscapeDv+" OrbitDV: "+OrbitDv+ "LandDV: "+LandDv);
         }
+
+        internal string GetName()
+        {
+            if (DisplayName != String.Empty) return DisplayName;
+            return Name;
+        }
     }
 }

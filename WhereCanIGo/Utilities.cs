@@ -132,11 +132,5 @@ namespace WhereCanIGo
             style.normal.textColor = Color.cyan;
             return style;
         }
-
-        internal string GetPlanetName(PlanetDeltaV planetDeltaV)
-        {
-            if (planetDeltaV.DisplayName != String.Empty) return planetDeltaV.DisplayName;
-            return planetDeltaV.Name;
-        }
     }
 }
