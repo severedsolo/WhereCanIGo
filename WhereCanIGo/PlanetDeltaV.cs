@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using UnityEngine;
 
@@ -8,7 +7,7 @@ namespace WhereCanIGo
     {
         internal readonly string Name;
         internal readonly int EscapeDv;
-        internal readonly string DisplayName = String.Empty;
+        private readonly string _displayName = "";
         internal readonly int OrbitDv;
         internal readonly int SynchronousDv = -1;
         internal readonly int LandDv;
@@ -17,7 +16,7 @@ namespace WhereCanIGo
         internal readonly int ReturnFromLandingDv;
         internal readonly bool Setup;
         internal readonly bool RequireChutes;
-        internal readonly bool IsHomeWorld = false;
+        internal readonly bool IsHomeWorld;
         internal readonly CelestialBody RelatedBody;
         
         public PlanetDeltaV(ConfigNode setupNode)
@@ -38,7 +37,7 @@ namespace WhereCanIGo
             }
             int.TryParse(setupNode.GetValue("flybyDV"), out EscapeDv);
             if(!setupNode.TryGetValue("synchronousDV", ref SynchronousDv)) SynchronousDv = -1;
-            if(!setupNode.TryGetValue("displayName", ref DisplayName)) DisplayName = String.Empty;
+            if (!setupNode.TryGetValue("displayName", ref _displayName)) _displayName = "";
             int.TryParse(setupNode.GetValue("orbitDV"), out OrbitDv);
             int.TryParse(setupNode.GetValue("landDV"), out LandDv);
             int.TryParse(setupNode.GetValue("returnFromFlybyDV"), out ReturnFromFlybyDv);
@@ -51,8 +50,7 @@ namespace WhereCanIGo
 
         internal string GetName()
         {
-            if (DisplayName != String.Empty) return DisplayName;
-            return Name;
+            return _displayName != "" ? _displayName : Name;
         }
     }
 }

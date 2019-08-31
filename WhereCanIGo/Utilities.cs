@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -121,7 +120,7 @@ namespace WhereCanIGo
 
         internal UIStyle CreateNoteStyle()
         {
-            int fontsize = 12;
+            const int fontsize = 12;
             UIStyle style = new UIStyle
             {
                 alignment = TextAnchor.MiddleLeft,
