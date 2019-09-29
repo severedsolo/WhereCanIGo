@@ -105,18 +105,47 @@ namespace WhereCanIGo
 
         private Color GetTextColor(int deltaV)
         {
+            ConfigNode modNode = GameDatabase.Instance.GetConfigNode("WhereCanIGo/WHERE_CAN_I_GO");
             switch (VesselStatus(deltaV, "", null))
             {
                 case "NO":
-                    return Color.red;
+                    return ParseColor(modNode.GetValue("colorIfNo"));
                 case "MARGINAL":
-                    return Color.yellow;
+                    return ParseColor(modNode.GetValue("colorIfMarginal"));
                 case "YES":
-                    return Color.green;
+                    return ParseColor(modNode.GetValue("colorIfYes"));
                 default:
-                    return Color.green;
+                    return ParseColor(modNode.GetValue("colorIfYes"));
             }
         }
+
+        private Color ParseColor(string color)
+        {
+            switch (color)
+            {
+                case "black":
+                    return Color.black;
+                case "blue":
+                    return Color.blue;
+                case "cyan":
+                    return Color.cyan;
+                case "gray":
+                    return Color.gray;
+                case "green":
+                    return Color.green;
+                case "magenta":
+                    return Color.magenta;
+                case "red":
+                    return Color.red;
+                case "white":
+                    return Color.white;
+                case "yellow":
+                    return Color.yellow;
+                default:
+                    return Color.black;
+            }
+        }
+
 
         internal UIStyle CreateNoteStyle()
         {
