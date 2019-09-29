@@ -121,6 +121,7 @@ namespace WhereCanIGo
 
         private Color ParseColor(string color)
         {
+            color = color.ToLower();
             switch (color)
             {
                 case "black":
