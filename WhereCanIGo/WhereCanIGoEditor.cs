@@ -14,6 +14,7 @@ namespace WhereCanIGo
         private readonly Rect _geometry = new Rect(0.5f, 0.5f, 700, 500);
         private bool _returnTrip;
         private Utilities _utilities;
+        private bool payloadOnly;
 
         private void Awake()
         {
@@ -55,11 +56,14 @@ namespace WhereCanIGo
                 guiItems.Add(new DialogGUILabel(_utilities.SystemNotes, _utilities.CreateNoteStyle()));
                 guiItems.Add(new DialogGUILabel(_utilities.Warnings, _utilities.CreateNoteStyle()));
                 DialogGUIBase[] vertical = new DialogGUIBase[_utilities.Planets.Count];
-                guiItems.Add(new DialogGUIToggle(() => _returnTrip, "Return Trip?", delegate { SetReturnTrip(); }));
+                DialogGUIBase[] horizontal = new DialogGUIBase[2];
+                horizontal[0] = new DialogGUIToggle(() => _returnTrip, "Return Trip?", delegate { SetReturnTrip(); });
+                horizontal[1] = new DialogGUIToggle(() => payloadOnly, "Payload Only", delegate { SetPayoadOnly(); });
+                guiItems.Add(new DialogGUIHorizontalLayout(horizontal));
                 for (int i = 0; i < _utilities.Planets.Count; i++)
                 {
                     PlanetDeltaV p = _utilities.Planets.ElementAt(i);
-                    DialogGUIBase[] horizontal = new DialogGUIBase[4];
+                    horizontal = new DialogGUIBase[4];
                     horizontal[0] = new DialogGUILabel(p.GetName(), _utilities.GenerateStyle(-1, false));
                     horizontal[1] = GetDeltaVString(p, "Flyby: ");
                     horizontal[2] = GetDeltaVString(p, "Orbiting: "); 
@@ -76,6 +80,12 @@ namespace WhereCanIGo
                 new MultiOptionDialog("WhereCanIGoDialog", "", "Where Can I Go", UISkinManager.defaultSkin,
                     _geometry,
                     guiItems.ToArray()), false, UISkinManager.defaultSkin);
+        }
+
+        private void SetPayoadOnly()
+        {
+            payloadOnly = !payloadOnly;
+            RefreshDialog();
         }
 
 
@@ -102,6 +112,8 @@ namespace WhereCanIGo
                         deltaV = planet.SynchronousDv;
                         break;
                 }
+
+            if (payloadOnly) deltaV -= _utilities.ConvertBodyToPlanetDeltaV(FlightGlobals.GetHomeBody()).OrbitDv;
             UIStyle style = _utilities.GenerateStyle(deltaV, false);
             string status = _utilities.VesselStatus(deltaV, situation, planet);
             double shortFallOrDeficit = 0;
@@ -129,6 +141,11 @@ namespace WhereCanIGo
         private void SetReturnTrip()
         {
             _returnTrip = !_returnTrip;
+            RefreshDialog();
+        }
+
+        private void RefreshDialog()
+        {
             _utilities.CloseDialog(_uiDialog);
             Invoke(nameof(SpawnDialog), 0.1f);
         }

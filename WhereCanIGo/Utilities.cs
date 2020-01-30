@@ -38,6 +38,16 @@ namespace WhereCanIGo
             _uiDialog = GenerateErrorDialog();
         }
         
+        public PlanetDeltaV ConvertBodyToPlanetDeltaV(CelestialBody cb)
+        {
+            for (int i = 0; i < Planets.Count; i++)
+            {
+                PlanetDeltaV p = Planets.ElementAt(i);
+                if (p.Name == cb.bodyName) return p;
+            }
+            return null;
+        }
+        
         private PopupDialog GenerateErrorDialog()
         {
             List<DialogGUIBase> dialog = new List<DialogGUIBase>

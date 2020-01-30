@@ -81,16 +81,6 @@ namespace WhereCanIGo
                     guiItems.ToArray()), false, UISkinManager.defaultSkin);
         }
 
-        private PlanetDeltaV ConvertBodyToPlanetDeltaV(CelestialBody cb)
-        {
-            for (int i = 0; i < _utilities.Planets.Count; i++)
-            {
-                PlanetDeltaV p = _utilities.Planets.ElementAt(i);
-                if (p.Name == cb.bodyName) return p;
-            }
-            return null;
-        }
-
 
 
 
@@ -119,7 +109,7 @@ namespace WhereCanIGo
                     break;
             }
 
-            deltaV -= ConvertBodyToPlanetDeltaV(FlightGlobals.GetHomeBody()).OrbitDv;
+            deltaV -= _utilities.ConvertBodyToPlanetDeltaV(FlightGlobals.GetHomeBody()).OrbitDv;
             UIStyle style = _utilities.GenerateStyle(deltaV, false);
             string status = _utilities.VesselStatus(deltaV, situation, planet);
             double shortFallOrDeficit = Math.Round(Math.Abs(deltaV - FlightGlobals.ActiveVessel.VesselDeltaV.TotalDeltaVVac),0);
