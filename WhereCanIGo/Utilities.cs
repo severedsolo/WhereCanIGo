@@ -24,14 +24,12 @@ namespace WhereCanIGo
             }
             SystemNotes = deltaVNode.GetValue("notes");
             Warnings = deltaVNode.GetValue("warning");
-            double rescaleFactor = 1;
-            if (!deltaVNode.TryGetValue("rescaleFactor", ref rescaleFactor)) rescaleFactor = 1;
-            rescaleFactor = System.Math.Sqrt(rescaleFactor);
+            double rescaleMultiplier = GetRescaleMultiplier(deltaVNode);
             ConfigNode[] bodies = deltaVNode.GetNodes("BODY");
             for (int i = 0; i < bodies.Length; i++)
             {
                 ConfigNode cn = bodies.ElementAt(i);
-                PlanetDeltaV planetToSetup = new PlanetDeltaV(cn, rescaleFactor);
+                PlanetDeltaV planetToSetup = new PlanetDeltaV(cn, rescaleMultiplier);
                 if (planetToSetup.Setup) Planets.Add(planetToSetup);
             }
 
@@ -39,7 +37,17 @@ namespace WhereCanIGo
             Debug.Log("[WhereCanIGo]: No planets were setup");
             _uiDialog = GenerateErrorDialog();
         }
-        
+
+        private double GetRescaleMultiplier(ConfigNode loadedConfig)
+        {
+            double rescaleFactor = 1;
+            double originalRescale = 1;
+            if (!loadedConfig.TryGetValue("rescaleFactor", ref rescaleFactor)) return 1;
+            if (!loadedConfig.TryGetValue("originalScale", ref originalRescale)) originalRescale = 1;
+            double relativeScaleToStock = originalRescale - rescaleFactor + 1;
+            return System.Math.Sqrt(relativeScaleToStock);
+        }
+
         public PlanetDeltaV ConvertBodyToPlanetDeltaV(CelestialBody cb)
         {
             for (int i = 0; i < Planets.Count; i++)
