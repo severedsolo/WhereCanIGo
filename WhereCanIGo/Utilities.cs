@@ -24,12 +24,14 @@ namespace WhereCanIGo
             }
             SystemNotes = deltaVNode.GetValue("notes");
             Warnings = deltaVNode.GetValue("warning");
-            
+            double rescaleFactor = 1;
+            if (!deltaVNode.TryGetValue("rescaleFactor", ref rescaleFactor)) rescaleFactor = 1;
+            rescaleFactor = System.Math.Sqrt(rescaleFactor);
             ConfigNode[] bodies = deltaVNode.GetNodes("BODY");
             for (int i = 0; i < bodies.Length; i++)
             {
                 ConfigNode cn = bodies.ElementAt(i);
-                PlanetDeltaV planetToSetup = new PlanetDeltaV(cn);
+                PlanetDeltaV planetToSetup = new PlanetDeltaV(cn, rescaleFactor);
                 if (planetToSetup.Setup) Planets.Add(planetToSetup);
             }
 

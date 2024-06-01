@@ -1,26 +1,29 @@
 using System.Linq;
+using LibNoise;
 using UnityEngine;
+using Math = LibNoise.Math;
 
 namespace WhereCanIGo
 {
     public class PlanetDeltaV
     {
         internal readonly string Name;
-        internal readonly int EscapeDv;
+        internal int EscapeDv;
         private readonly string _displayName = "";
-        internal readonly int OrbitDv;
-        internal readonly int SynchronousDv = -1;
-        internal readonly int LandDv;
-        internal readonly int ReturnFromFlybyDv;
-        internal readonly int ReturnFromOrbitDv;
-        internal readonly int ReturnFromLandingDv;
-        internal readonly bool Setup;
-        internal readonly bool RequireChutes;
-        internal readonly bool IsHomeWorld;
+        internal int OrbitDv;
+        internal int SynchronousDv = -1;
+        internal int LandDv;
+        internal int ReturnFromFlybyDv;
+        internal int ReturnFromOrbitDv;
+        internal int ReturnFromLandingDv;
+        internal bool Setup;
+        internal bool RequireChutes;
+        internal bool IsHomeWorld;
         internal readonly CelestialBody RelatedBody;
-        
-        public PlanetDeltaV(ConfigNode setupNode)
+
+        public PlanetDeltaV(ConfigNode setupNode, double rescaleFactor)
         {
+
             Name = setupNode.GetValue("name");
             for (int i = 0; i < FlightGlobals.Bodies.Count; i++)
             {
@@ -44,8 +47,20 @@ namespace WhereCanIGo
             int.TryParse(setupNode.GetValue("returnFromOrbitDV"), out ReturnFromOrbitDv);
             int.TryParse(setupNode.GetValue("returnFromLandingDV"), out ReturnFromLandingDv);
             bool.TryParse(setupNode.GetValue("requireChutes"), out RequireChutes);
+            RescaleSystem(rescaleFactor);
             Setup = true;
             Debug.Log("[WhereCanIGo]: Setup "+Name+" EscapeDV: "+EscapeDv+" OrbitDV: "+OrbitDv+ "LandDV: "+LandDv);
+        }
+
+        private void RescaleSystem(double rescaleFactor)
+        {
+            EscapeDv = (int) (EscapeDv* rescaleFactor);
+            SynchronousDv = (int) (SynchronousDv * rescaleFactor);
+            OrbitDv = (int)(OrbitDv * rescaleFactor);
+            LandDv = (int)(LandDv * rescaleFactor);
+            ReturnFromFlybyDv = (int)(ReturnFromFlybyDv * rescaleFactor);
+            ReturnFromOrbitDv = (int)(ReturnFromOrbitDv * rescaleFactor);
+            ReturnFromLandingDv = (int)(ReturnFromLandingDv * rescaleFactor);
         }
 
         internal string GetName()
